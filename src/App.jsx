@@ -3,15 +3,29 @@ import apiCall from "./api";
 
 function App() {
   const [data, setData] = useState(undefined);
+  const [currentPosition, setCurrentPosition] = useState();
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const current = {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+      };
+
+      setCurrentPosition(current);
+    });
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
-      const dataApi = await apiCall.fetch({ lat: 41.38879, lon: 2.15899 });
+      const dataApi = await apiCall.fetch(currentPosition);
 
       setData(dataApi);
     };
-    getData();
-  }, []);
+    {
+      typeof currentPosition !== "undefined" && getData();
+    }
+  }, [currentPosition]);
 
   return (
     <div>
