@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import apiCall from "./api";
+import Loading from "./Components/Loading";
 
 function App() {
   const [data, setData] = useState(undefined);
   const [currentPosition, setCurrentPosition] = useState();
   const [citiToShow, setCitiToShow] = useState("Tu ubicación");
+  const [showLoading, setShowLoading] = useState(true);
 
   const CITIES = [
     {
@@ -36,6 +38,7 @@ function App() {
       const dataApi = await apiCall.fetch(currentPosition);
 
       setData(dataApi);
+      setShowLoading(false);
     };
     {
       typeof currentPosition !== "undefined" && getData();
@@ -44,17 +47,19 @@ function App() {
 
   const handleCityChange = async (citiId) => {
     const citi = CITIES.find((citi) => citi.id === citiId);
+    setCitiToShow(citi.name);
+    setShowLoading(true);
 
     const dataApi = await apiCall.fetch(citi);
 
     setData(dataApi);
-    setCitiToShow(citi.name);
+    setShowLoading(false);
   };
 
   return (
     <div>
-      {typeof data === "undefined" ? (
-        <h1>flow challenge</h1>
+      {showLoading ? (
+        <Loading citiToShow={citiToShow} />
       ) : (
         <div>
           <select onChange={(e) => handleCityChange(e.target.value)}>
