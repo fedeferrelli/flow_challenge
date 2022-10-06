@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import apiCall from "./api";
 import Loading from "./Components/Loading";
 import Selector from "./Components/Selector";
+import CurrentWeather from "./Components/CurrentWeather";
 
 function App() {
   const [data, setData] = useState(undefined);
@@ -59,6 +60,8 @@ function App() {
             currentPosition={currentPosition}
             setShowLoading={setShowLoading}
           />
+
+          <CurrentWeather currentWeather={data[0]}/>
 
           {data.map((day) => (
             <div key={day.dt}>
