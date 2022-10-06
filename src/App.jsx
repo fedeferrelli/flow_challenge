@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import apiCall from "./api";
 import Loading from "./Components/Loading";
+import Selector from "./Components/Selector";
 
 function App() {
   const [data, setData] = useState(undefined);
@@ -45,35 +46,19 @@ function App() {
     }
   }, [currentPosition]);
 
-  const handleCityChange = async (citiId) => {
-    const citi = CITIES.find((citi) => citi.id === citiId);
-    setCitiToShow(citi.name);
-    setShowLoading(true);
-
-    const dataApi = await apiCall.fetch(citi);
-
-    setData(dataApi);
-    setShowLoading(false);
-  };
-
   return (
     <div>
       {showLoading ? (
         <Loading citiToShow={citiToShow} />
       ) : (
         <div>
-          <select onChange={(e) => handleCityChange(e.target.value)}>
-            <option value="">{citiToShow}</option>
-            {CITIES.filter((citi) => citi.name !== citiToShow)
-              .sort((citiPrev, citiNext) =>
-                citiPrev.name.localeCompare(citiNext.name)
-              )
-              .map((citi) => (
-                <option key={citi.id} value={citi.id}>
-                  {citi.name}{" "}
-                </option>
-              ))}
-          </select>
+          <Selector
+            citiToShow={citiToShow}
+            setCitiToShow={setCitiToShow}
+            setData={setData}
+            currentPosition={currentPosition}
+            setShowLoading={setShowLoading}
+          />
 
           {data.map((day) => (
             <div key={day.dt}>
