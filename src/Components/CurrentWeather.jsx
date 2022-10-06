@@ -1,7 +1,7 @@
 import React from "react";
 
 function CurrentWeather({ currentWeather }) {
-  console.log(currentWeather);
+  
 
   const {
     dt: date,

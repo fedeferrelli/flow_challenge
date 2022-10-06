@@ -3,26 +3,13 @@ import apiCall from "./api";
 import Loading from "./Components/Loading";
 import Selector from "./Components/Selector";
 import CurrentWeather from "./Components/CurrentWeather";
+import Forecast from "./Components/Forecast";
 
 function App() {
   const [data, setData] = useState(undefined);
   const [currentPosition, setCurrentPosition] = useState();
   const [citiToShow, setCitiToShow] = useState("Tu ubicación");
   const [showLoading, setShowLoading] = useState(true);
-
-  const CITIES = [
-    {
-      name: "Tu ubicación",
-      id: "ubicacion",
-      lat: currentPosition?.lat,
-      lon: currentPosition?.lon,
-    },
-    { name: "Barcelona", id: "bcn", lat: 41.38879, lon: 2.15899 },
-    { name: "Necochea", id: "neco", lat: -38.560386, lon: -58.8263165 },
-    { name: "Mar del Plata", id: "mdq", lat: -38.0172131, lon: -57.74062 },
-    { name: "Buenos Aires", id: "caba", lat: -34.6154611, lon: -58.5733849 },
-    { name: "Córdoba", id: "cba", lat: -31.399084, lon: -64.334431 },
-  ];
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -61,13 +48,9 @@ function App() {
             setShowLoading={setShowLoading}
           />
 
-          <CurrentWeather currentWeather={data[0]}/>
+          <CurrentWeather currentWeather={data[0]} />
 
-          {data.map((day) => (
-            <div key={day.dt}>
-              {day.dt} {day.temp}
-            </div>
-          ))}
+          <Forecast forecast={data.slice(1)} />
         </div>
       )}
     </div>
